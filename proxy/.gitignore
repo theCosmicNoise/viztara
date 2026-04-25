@@ -1,0 +1,13 @@
+# Local secret values — never commit to git
+.env
+.dev.vars
+
+# Wrangler build cache and output
+.wrangler/
+node_modules/
+dist/
+
+# Editor files
+.DS_Store
+.vscode/
+*.log

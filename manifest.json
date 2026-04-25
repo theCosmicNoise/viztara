@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Viztara",
+  "version": "0.1.0",
+  "description": "AI companion for Tableau Public — understand any viz instantly, identify chart types, and learn how to build it.",
+  "minimum_chrome_version": "114",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "src/background/background.ts",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Viztara — click for settings"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://public.tableau.com/*"],
+      "js": ["src/content/content.tsx"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "src/options/index.html",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

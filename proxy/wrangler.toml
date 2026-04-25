@@ -1,0 +1,22 @@
+# Cloudflare Worker config for the Tableau Lens search proxy.
+#
+# ✅ SAFE TO COMMIT to git. Nothing in this file is a secret:
+#    - `name`, `main`, `compatibility_date` are routing/build config
+#    - The KV namespace `id` is an opaque pointer; possessing it doesn't
+#      grant access to data inside (Cloudflare gates that with your
+#      account credentials)
+#
+# ❌ Real secrets (Serper API key) are stored separately in Cloudflare's
+#    encrypted secret store via `wrangler secret put`, NOT in this file.
+#    See `.env.example` for the list of secrets this worker expects.
+#
+# 🔁 If you fork this project, replace the `id` below with your own
+#    namespace ID (created via `wrangler kv namespace create TUTORIAL_CACHE`).
+
+name = "tableau-lens-proxy"
+main = "worker.ts"
+compatibility_date = "2025-04-01"
+
+[[kv_namespaces]]
+binding = "TUTORIAL_CACHE"
+id = "2211706bc7c3413e830e31813584fef9"

@@ -1,0 +1,17 @@
+{
+  "name": "tableau-lens-proxy",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker that proxies Serper search for the Viztara extension. Lets users skip the search-API signup step.",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "logs": "wrangler tail",
+    "list-secrets": "wrangler secret list"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0",
+    "@cloudflare/workers-types": "^4.20240909.0",
+    "typescript": "^5.3.0"
+  }
+}

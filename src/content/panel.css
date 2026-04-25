@@ -1,0 +1,324 @@
+/**
+ * Styles for the injected panel + trigger button.
+ * Everything here lives inside a Shadow DOM root, so we don't pollute the
+ * host page, and Tableau's CSS can't leak in either.
+ *
+ * Design tokens match Viztara brand (magenta on near-black, editorial sans).
+ */
+
+:host {
+  all: initial;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  color: #1a1a1a;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+button { font-family: inherit; color: inherit; }
+
+/* ── Host container (fixed overlay anchored bottom-right) ────────────── */
+/* Bottom-right is the universal "assistant is here" spot (Intercom, Grammarly,
+ * Loom). On Tableau Public it avoids colliding with the top-nav Sign in button
+ * and the left-side profile/breadcrumb area.                                  */
+.tl-host {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2147483647;
+  pointer-events: none; /* children opt in */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.tl-host > * { pointer-events: auto; }
+
+/* ── Circular trigger button (collapsed state) ───────────────────────── */
+/* Vibrant magenta gradient matching the Viztara icon — bright enough to
+ * read as "interactive" immediately, complements Tableau Public's blue UI.  */
+.tl-trigger {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff5da0 0%, #ff2d78 50%, #e01c63 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow:
+    0 8px 24px rgba(255, 45, 120, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  animation: tl-pulse 2.4s ease-in-out infinite;
+}
+.tl-trigger:hover {
+  transform: scale(1.08);
+  box-shadow:
+    0 10px 28px rgba(255, 45, 120, 0.55),
+    0 3px 8px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+.tl-trigger:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 3px;
+}
+
+@keyframes tl-pulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(255,45,120,0.45), 0 2px 6px rgba(0,0,0,0.18), 0 0 0 0 rgba(255,45,120,0.50), inset 0 1px 0 rgba(255,255,255,0.28); }
+  50%      { box-shadow: 0 8px 24px rgba(255,45,120,0.45), 0 2px 6px rgba(0,0,0,0.18), 0 0 0 16px rgba(255,45,120,0), inset 0 1px 0 rgba(255,255,255,0.28); }
+}
+
+/* ── Panel (expanded state) ──────────────────────────────────────────── */
+.tl-panel {
+  width: 380px;
+  max-height: calc(100vh - 32px);
+  background: #fafaf7;
+  border: 1px solid #e6e3dc;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: tl-slide-in 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes tl-slide-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Panel header ────────────────────────────────────────────────────── */
+.tl-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e6e3dc;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.tl-brand { display: flex; align-items: center; gap: 8px; }
+.tl-brand-icon {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #ff5da0 0%, #e01c63 100%);
+  color: #ffffff;
+  display: flex; align-items: center; justify-content: center;
+}
+.tl-brand-text {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.tl-header-actions { display: flex; gap: 4px; align-items: center; }
+.tl-icon-btn {
+  width: 28px; height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #8a8a8a;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  transition: background 0.15s, color 0.15s;
+}
+.tl-icon-btn:hover { background: #e6e3dc; color: #1a1a1a; }
+.tl-icon-btn:focus-visible {
+  outline: 2px solid #ff2d78;
+  outline-offset: 1px;
+}
+.tl-close { font-size: 18px; line-height: 1; }
+
+/* ── Panel body ──────────────────────────────────────────────────────── */
+.tl-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Viz meta header */
+.tl-viz-meta {
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #e6e3dc;
+  border-radius: 7px;
+}
+.tl-viz-meta .title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  color: #1a1a1a;
+  font-size: 14px;
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+.tl-viz-meta .author {
+  color: #8a8a8a;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Cards */
+.tl-card {
+  background: #ffffff;
+  border: 1px solid #e6e3dc;
+  border-radius: 7px;
+  padding: 14px;
+}
+.tl-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8a8a8a;
+}
+.tl-card-header-accent { color: #ff2d78; }
+.tl-card p {
+  color: #4a4a4a;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* Chart type list */
+.tl-chart-types { list-style: none; }
+.tl-chart-types li {
+  padding: 7px 0;
+  border-bottom: 1px solid #e6e3dc;
+  font-size: 13px;
+}
+.tl-chart-types li:last-child { border-bottom: none; }
+.tl-chart-types .name { font-weight: 500; color: #1a1a1a; }
+.tl-chart-types .desc { font-size: 11.5px; color: #8a8a8a; margin-top: 1px; }
+
+/* Tutorials */
+.tl-tutorials { display: flex; flex-direction: column; gap: 6px; }
+.tl-tutorial {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid #e6e3dc;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #1a1a1a;
+  transition: border-color 0.15s, background 0.15s;
+}
+.tl-tutorial:hover {
+  border-color: #ff2d78;
+  background: #fef1ed;
+}
+.tl-tutorial-src {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  border-radius: 4px;
+  background: #e6e3dc;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  color: #4a4a4a;
+}
+.tl-tutorial-body { flex: 1; min-width: 0; }
+.tl-tutorial-title {
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.tl-tutorial-meta {
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 9.5px;
+  color: #8a8a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Buttons */
+.tl-btn {
+  padding: 9px 14px;
+  background: #1a1a1a;
+  color: #fafaf7;
+  border: none;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.tl-btn:hover { background: #ff2d78; }
+.tl-btn:focus-visible {
+  outline: 2px solid #ff2d78;
+  outline-offset: 2px;
+}
+.tl-btn-ghost {
+  background: transparent;
+  color: #4a4a4a;
+  border: 1px solid #e6e3dc;
+}
+.tl-btn-ghost:hover { background: #e6e3dc; color: #1a1a1a; }
+
+/* States */
+.tl-empty {
+  padding: 24px 8px;
+  text-align: center;
+  color: #4a4a4a;
+}
+.tl-empty h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+}
+.tl-empty p { font-size: 13px; margin-bottom: 12px; }
+
+.tl-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  color: #8a8a8a;
+  font-size: 13px;
+}
+.tl-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid #e6e3dc;
+  border-top-color: #ff2d78;
+  border-radius: 50%;
+  animation: tl-spin 0.8s linear infinite;
+}
+@keyframes tl-spin { to { transform: rotate(360deg); } }
+
+.tl-error {
+  padding: 10px 12px;
+  background: #fef1ed;
+  border: 1px solid #f4c5b8;
+  color: #8a3621;
+  border-radius: 5px;
+  font-size: 12.5px;
+}
+
+h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 16px;
+  font-weight: 500;
+}
