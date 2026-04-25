@@ -34,6 +34,9 @@ Two pieces, both in this repo:
    tutorial discovery. Optional but recommended; without it users get only
    Tableau's official docs as tutorial fallbacks.
 
+<img width="1470" height="831" alt="image" src="https://github.com/user-attachments/assets/e560f895-90c1-4a11-9968-bf7a6bab6bd2" />
+
+
 ## Tech stack
 
 - **Extension:** TypeScript, React 18, Vite, CRXJS plugin, Manifest V3,
